@@ -1,0 +1,23 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Update pip
+      run: |
+        /home/adminuser/venv/bin/python -m pip install --upgrade pip
+
+    - name: Install Streamlit
+      run: |
+        pip install streamlit
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Deploy Streamlit app
+      run: |
+        streamlit run app.py

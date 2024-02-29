@@ -40,7 +40,7 @@ streamlit run Honepage.py
 
 ### View
 
-![homepage](http://static.ivanlife.cn//imges/image-20231008220750893.png)
+![homepage](https://static.ivanlife.cn/imges/image-20231008220750893.png)
 
 ### Directory Structure
 

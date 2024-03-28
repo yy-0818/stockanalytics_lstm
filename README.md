@@ -29,13 +29,13 @@ venv\Scripts\activate
 ### Install dependencies
 
 ```
-python3.10 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ### Run the app
 
-```
-streamlit run Honepage.py
+````
+streamlit run Homepage.py
 ```
 
 ### View
@@ -44,28 +44,32 @@ streamlit run Honepage.py
 
 ### Directory Structure
 
-```
+````
+
 ├── Stock_History_Day_K-Line
-│   ├── Data
-│   │   ├── combined_stock_data.csv
-│   │   ├── data.ipynb
-│   │   ├── stock_1.csv
-│   │   ├── stock_2.csv
-│   │   ├── stock_3.csv
-│   │   └── stock_data_summary.csv
-│   ├── Homepage.py
-│   ├── Model
-│   │   ├── model_1.h5
-│   │   └── model_2.h5
-│   ├── history.ipynb
-│   ├── historyK.py
-│   ├── images
-│   │   ├── lstm.jpg
-│   │   ├── lstm_inside.jpg
-│   │   └── rnn.jpg
-│   └── pages
-│       ├── 📄profile_report.py
-│       └── 📈Stock Price Prediction.py
+│ ├── Data
+│ │ ├── combined_stock_data.csv
+│ │ ├── data.ipynb
+│ │ ├── stock_1.csv
+│ │ ├── stock_2.csv
+│ │ ├── stock_3.csv
+│ │ └── stock_data_summary.csv
+│ ├── Homepage.py
+│ ├── Model
+│ │ ├── model_1.h5
+│ │ └── model_2.h5
+│ ├── history.ipynb
+│ ├── historyK.py
+│ ├── images
+│ │ ├── lstm.jpg
+│ │ ├── lstm_inside.jpg
+│ │ └── rnn.jpg
+│ └── pages
+│ ├── 📄profile_report.py
+│ └── 📈Stock Price Prediction.py
 ├── requirements.txt
 └── README.md
+
+```
+
 ```

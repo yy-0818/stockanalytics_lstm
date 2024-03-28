@@ -1,13 +1,11 @@
 import logging
-
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-
-sns.set(style='whitegrid', font='SimHei')
-plt.switch_backend('agg')  # 
+# sns.set_theme(style='whitegrid', font='SimHei')
+# plt.switch_backend('agg')  
 st.set_page_config(
     layout="wide",
     page_title='Real-Time Stock Price Prediction',
@@ -19,11 +17,31 @@ types = ["贵州茅台","苹果","腾讯"]
 label_stock_dict_teams = {"Stock Name","Stock Code","Date","Open","Close","High","Low","Volume","Turnover,Amplitude","Change Percent","Change Amount","Turnover Rate"}
 
 
-
+def add_logo():
+     st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url(https://s2.loli.net/2024/03/28/s3i6mgKr5vd9ADR.png);
+                background-repeat: no-repeat;
+                padding-top: 120px;
+                background-position: 20px 20px;
+            }
+            [data-testid="stSidebarNav"]::before {
+                content: "Stock Market Analysis";
+                margin-left: 20px;
+                margin-top: 20px;
+                font-size: 30px;
+                position: relative;
+                top: 100px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 def main():
     with st.sidebar:
-        st.title('')
         st.info('该项目可以帮助你理解LSTM')
     # st.title('基于 LSTM 模型股票分析与预测📈')
     st.markdown("<h1 style='text-align: center; color: black;'>基于 LSTM 模型股票分析与预测📊</h1>", unsafe_allow_html=True)
@@ -93,7 +111,7 @@ def tell_me_more():
     """)
     col14, col5,col6 = st.columns(3)
     col5.image(r'Stock_History_Day_K-Line\images\lstm.jpg', width=500, caption='LSTM 神经网络结构图')
-    # col2.image(r'Stock_History_Day_K-Line\images\lstm_inside.jpg', width=500, caption='LSTM 神经网络内部结构')
+    # col5.image(r'Stock_History_Day_K-Line\images\lstm_inside.jpg', width=500, caption='LSTM 神经网络内部结构')
 
     st.markdown(r"""
     遗忘门（Forget Gate）,在 LSTM 中的第一步是决定我们会从细胞状态中丢弃什么信息。这个决定通过一个称为遗忘门层完成。该门会读取 $h_{t-1}$和 $x_(t)$ ，输出一个在 0 到 1 之间的数值给每个细胞状态 $C_{t-1}$ 中的数字。1表示“完全保留”，0 表示“完全舍弃”:
@@ -155,5 +173,5 @@ def upload_data():
 if __name__ == '__main__':
 
     logging.basicConfig(level=logging.CRITICAL)
-
+    add_logo()
     main()

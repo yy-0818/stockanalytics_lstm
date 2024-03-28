@@ -11,7 +11,7 @@ git clone https://github.com/yy-0818/stockanalytics_lstm.git
 ### Create a virtual environment
 
 ```
-python3.10 -m venv venv
+python -m venv venv
 ```
 
 ### Activate the virtual environment (Linux/macOS)
@@ -34,7 +34,7 @@ python -m pip install -r requirements.txt
 
 ### Run the app
 
-````
+```
 streamlit run Homepage.py
 ```
 
@@ -44,8 +44,7 @@ streamlit run Homepage.py
 
 ### Directory Structure
 
-````
-
+```
 ├── Stock_History_Day_K-Line
 │ ├── Data
 │ │ ├── combined_stock_data.csv
@@ -69,7 +68,4 @@ streamlit run Homepage.py
 │ └── 📈Stock Price Prediction.py
 ├── requirements.txt
 └── README.md
-
-```
-
 ```

@@ -1,20 +1,11 @@
 import logging
 import streamlit as st
-import seaborn as sns
-import matplotlib.pyplot as plt
 
-
-# sns.set_theme(style='whitegrid', font='SimHei')
-# plt.switch_backend('agg')  
 st.set_page_config(
     layout="wide",
     page_title='Real-Time Stock Price Prediction',
     page_icon = '💹',
 )
-
-
-types = ["贵州茅台","苹果","腾讯"]
-label_stock_dict_teams = {"Stock Name","Stock Code","Date","Open","Close","High","Low","Volume","Turnover,Amplitude","Change Percent","Change Amount","Turnover Rate"}
 
 
 def add_logo():

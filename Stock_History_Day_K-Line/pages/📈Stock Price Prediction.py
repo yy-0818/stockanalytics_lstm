@@ -3,14 +3,13 @@ import os
 import streamlit as st
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 from streamlit_echarts import st_echarts
 from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
 
-# plt.switch_backend('agg')  #  切换agg后端渲染
+
 st.set_page_config(
     layout="wide",
     page_title='Real-Time Stock Price Prediction',
@@ -291,11 +290,6 @@ def main():
         st.sidebar.write('未知模型:', stock_model_n)
 
     data_point = st.sidebar.slider('选择数据点', min_value=0, max_value=len(Y_test)-1)
-    # st.sidebar.write(f'日期: {selected_stock_df.iloc[data_point]["Date"]}')
-    # st.sidebar.write(f'开盘价: {selected_stock_df.iloc[data_point]["Open"]}')
-    # st.sidebar.write(f'收盘价: {selected_stock_df.iloc[data_point]["Close"]}')
-    # st.sidebar.write(f'最高价: {selected_stock_df.iloc[data_point]["High"]}')
-    # st.sidebar.write(f'最低价: {selected_stock_df.iloc[data_point]["Low"]}')
     selected_date = selected_stock_df.iloc[data_point + look_back]["Date"]
     actual_price = selected_stock_df.iloc[data_point + look_back]["Close"]
     predicted_price = X_test_pred_price[data_point][0]

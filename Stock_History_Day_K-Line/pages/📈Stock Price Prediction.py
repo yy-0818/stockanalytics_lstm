@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from streamlit_echarts import st_echarts
 from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
-
+from datetime import datetime, timedelta
 
 # plt.switch_backend('agg')  #  切换agg后端渲染
 st.set_page_config(
@@ -52,6 +52,30 @@ def create_dataset(ds, look_back=1, scaler=None):
         Y_data.append(ds[i+look_back, 0])
     return np.array(X_data), np.array(Y_data)
 look_back = 60
+
+def predict_future_prices(model, last_data_scaled, look_back, scaler, days_to_predict):
+    # 获取当前日期
+    last_date = datetime.now().date()
+    # 初始化预测列表和日期列表
+    future_prices_scaled = []
+    future_dates = []
+    current_batch = last_data_scaled.reshape((1, look_back, 1))
+
+    # 逐天预测未来的股价
+    for i in range(days_to_predict):
+        # 使用当前批次数据进行预测
+        future_price_scaled = model.predict(current_batch)[0]
+        # 将预测结果添加到列表
+        future_prices_scaled.append(future_price_scaled)
+        # 更新批次数据，将新预测结果添加到批次数据的末尾，并移除最早的数据
+        current_batch = np.append(current_batch[:, 1:, :], [[future_price_scaled]], axis=1)
+        # 计算未来的日期并添加到日期列表
+        future_dates.append((last_date + timedelta(days=i+1)).strftime('%Y-%m-%d'))
+
+    # 将预测结果的缩放值转换回原始股价范围
+    future_prices = scaler.inverse_transform(np.array(future_prices_scaled).reshape(-1, 1))
+    return future_dates, future_prices.flatten().tolist()
+
 
 def upload_stock_data():
     uploaded_file = st.sidebar.file_uploader("上传 CSV 文件进行预测分析", type="csv")
@@ -106,7 +130,6 @@ def main():
         'LSTM': lstm_model,
     }
     with st.sidebar:
-        st.title('')
         st.markdown('# 设置参数📁')
         st.write('User input parameters below ⬇️')
 
@@ -135,9 +158,9 @@ def main():
 
     data_source = selected_stock_df[['Open', 'Close']]
     scatter_chart = {
-        "title": {"text": f"{stock_name} Stock"},
-        "xAxis": {"type": "value", "name": "Open"},
-        "yAxis": {"type": "value", "name": "Close"},
+        "title": {"text": f"{stock_name}股票：开盘价和收盘价之间的关系"},
+        "xAxis": {"type": "value", "name": "开盘价"},
+        "yAxis": {"type": "value", "name": "收盘价"},
         "series": [
             {
                 "type": "scatter",
@@ -175,15 +198,44 @@ def main():
         #  创建ECharts图表
         echarts_config = {
             "animationDuration": 10000,
-            "title": {"text": f"{stock_name} Predicted Stock Price"},
+            "title": {"text": f"{stock_name}：股价预测"},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["实际", "预测"]}, 
+            "toolbox": {
+                "feature": {
+                    "dataZoom": {
+                        "yAxisIndex": "none"
+                    },
+                    "restore": {},
+                    "saveAsImage": {}
+                }
+            },
+            "dataZoom": [
+                {
+                    "type": "inside",
+                    "start": 50,
+                    "end": 100
+                },
+                {
+                    "type": "slider",
+                    "start": 50,
+                    "end": 100,
+                    "handleSize": "80%",
+                    "handleStyle": {
+                        "color": "#fff",
+                        "shadowBlur": 3,
+                        "shadowColor": "rgba(0, 0, 0, 0.6)",
+                        "shadowOffsetX": 2,
+                        "shadowOffsetY": 2
+                    }
+                }
+            ],
             "xAxis": {
                 "type": "category",
                 "data": selected_stock_df['Date'].apply(lambda x: x.strftime('%Y-%m-%d')).tolist(),
                 "nameLocation": "middle"
             },
-            "yAxis": {"name": "Stock Price"},
+            "yAxis": {"name": "股价"},
             "grid": {"right": 140},
             "series": [
                 {
@@ -206,6 +258,34 @@ def main():
             ],
         }
         st_echarts(echarts_config, height="400px")
+        # 选择最后look_back天的数据作为预测的输入
+        last_data_scaled = X_train_set[-look_back:]
+        # 设定预测的未来天数
+        days_to_predict = 60
+        # 获取未来股价预测
+        future_dates, future_prices = predict_future_prices(selected_stock_model, last_data_scaled, look_back, scaler, days_to_predict)
+        # 创建未来股价预测图表配置
+        future_echarts_config = {
+            "title": {"text": f"{stock_name}：未来股价预测"},
+            "tooltip": {"trigger": "axis"},
+            "legend": {"data": ["预测"]},
+            "xAxis": {
+                "type": "category",
+                "data": future_dates,
+            },
+            "yAxis": {"name": "股价"},
+            "series": [
+                {
+                    "type": "line",
+                    "data": future_prices,
+                    "name": "预测",
+                    "showSymbol": True,
+                    "lineStyle": {"type": "dashed"},
+                    "itemStyle": {"color": "#1890ff"},
+                },
+            ],
+        }
+        st_echarts(future_echarts_config, height="400px")
 
     else:
         st.sidebar.write('未知模型:', stock_model_n)
@@ -224,6 +304,8 @@ def main():
     st.sidebar.write(f'实际收盘价: {actual_price}')
     st.sidebar.write(f'预测收盘价: {predicted_price}')
     st.sidebar.info('该项目可以帮助你理解LSTM')
+    st.divider()
+    st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
 
 
 if __name__ == '__main__':

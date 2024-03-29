@@ -66,7 +66,7 @@ def main():
         '腾讯控股': tencent_stock
     }
     with st.sidebar:
-        st.title('实时股票价格预测')
+        # st.title('实时股票价格预测')
         st.markdown('## 设置参数 📁')
         st.write('User input parameters below ⬇️')
 
@@ -78,9 +78,12 @@ def main():
     # 如果用户选择了上传 CSV 文件，则调用上传功能
     if stock_df == "上传CSV文件":
         upload_and_profile_data()
+        st.divider()
+        st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
     else:
         selected_stock_df = stock_data[stock_df]
-
+        st.divider()
+        st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
         # stock_data
         if stock_df in stock_data:
             see_data = st.expander(f'查看原始数据 \ View the raw data for {stock_df} 👉')

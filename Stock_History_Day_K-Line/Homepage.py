@@ -43,6 +43,8 @@ def add_logo():
 def main():
     with st.sidebar:
         st.info('该项目可以帮助你理解LSTM')
+        st.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
+
     # st.title('基于 LSTM 模型股票分析与预测📈')
     st.markdown("<h1 style='text-align: center; color: black;'>基于 LSTM 模型股票分析与预测📊</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: black;'>Stock Market Analysis + Prediction using LSTM📊</h4>", unsafe_allow_html=True)

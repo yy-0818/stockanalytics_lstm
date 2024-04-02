@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import streamlit as st
 from streamlit_pandas_profiling import st_profile_report
-import pandas_profiling
+from ydata_profiling import ProfileReport
+# import pandas_profiling
 
 
 st.set_page_config(
@@ -54,7 +55,8 @@ def upload_and_profile_data():
     if uploaded_file is not None:
         # 读取上传的 CSV 文件
         df = pd.read_csv(uploaded_file)
-        profile = pandas_profiling.ProfileReport(df)
+        profile = ProfileReport(df)  # Modified to use ydata_profiling
+        # profile = pandas_profiling.ProfileReport(df)
         st_profile_report(profile)
     else:
         st.sidebar.write("上传 CSV 文件以生成配置文件报告.")
@@ -90,7 +92,8 @@ def main():
             with see_data:
                 st.dataframe(selected_stock_df.reset_index(drop=True))
             
-            profile = pandas_profiling.ProfileReport(selected_stock_df)
+            # profile = pandas_profiling.ProfileReport(selected_stock_df)
+            profile = ProfileReport(selected_stock_df)
             st_profile_report(profile)
         else:
             st.sidebar.write('未知数据集:', stock_df)

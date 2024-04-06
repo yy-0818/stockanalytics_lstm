@@ -3,7 +3,6 @@ import os
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from streamlit_echarts import st_echarts
 from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
@@ -27,7 +26,7 @@ def load_models():
 
 @st.cache_data 
 def load_data():
-    data_locs = [os.getcwd() + '\Stock_History_Day_K-Line\Data\stock_{}.csv'.format(n) for n in range(1, 4)]
+    data_locs = [os.getcwd() + '\Stock_History_Day_K-Line\Data\stock_{}.csv'.format(n) for n in range(1, 5)]
     data = [pd.read_csv(data_loc) for data_loc in data_locs]
     return data
 
@@ -37,6 +36,7 @@ stock_data = load_data()
 moutai_stock = stock_data[0]
 aapl_stock = stock_data[1]
 tencent_stock = stock_data[2]
+tcl_stock = stock_data[3]
 #  加载模型数据
 models = load_models()
 rnn_model = models[0]
@@ -122,7 +122,8 @@ def main():
     stock_data = {
         '贵州茅台': moutai_stock,
         '苹果': aapl_stock,
-        '腾讯控股': tencent_stock
+        '腾讯控股': tencent_stock,
+        'TCL科技': tcl_stock,
     }
     stock_model = {
         'RNN': rnn_model,
@@ -142,6 +143,9 @@ def main():
             selected_stock_df = stock_data[stock_df]
         
         stock_model_n = st.sidebar.selectbox('选择模型', list(stock_model.keys()))
+        
+        days_to_predict = st.sidebar.slider('选择预测的未来天数', min_value=1, max_value=120, value=60)
+
     
     selected_stock_df = stock_data[stock_df]
     selected_stock_model = stock_model[stock_model_n]
@@ -259,8 +263,6 @@ def main():
         st_echarts(echarts_config, height="400px")
         # 选择最后look_back天的数据作为预测的输入
         last_data_scaled = X_train_set[-look_back:]
-        # 设定预测的未来天数
-        days_to_predict = 60
         # 获取未来股价预测
         future_dates, future_prices = predict_future_prices(selected_stock_model, last_data_scaled, look_back, scaler, days_to_predict)
         # 创建未来股价预测图表配置
@@ -289,14 +291,17 @@ def main():
     else:
         st.sidebar.write('未知模型:', stock_model_n)
 
+    last_day_price = future_prices[-1]  
+    st.sidebar.write(f'未来第 {days_to_predict} 天的股价预测: {last_day_price:.2f}')
+
     data_point = st.sidebar.slider('选择数据点', min_value=0, max_value=len(Y_test)-1)
     selected_date = selected_stock_df.iloc[data_point + look_back]["Date"]
     actual_price = selected_stock_df.iloc[data_point + look_back]["Close"]
     predicted_price = X_test_pred_price[data_point][0]
-
     st.sidebar.write(f'日期: {selected_date}')
     st.sidebar.write(f'实际收盘价: {actual_price}')
     st.sidebar.write(f'预测收盘价: {predicted_price}')
+    
     st.sidebar.info('该项目可以帮助你理解LSTM')
     st.divider()
     st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)

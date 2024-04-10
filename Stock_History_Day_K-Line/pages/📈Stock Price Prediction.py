@@ -135,6 +135,7 @@ def main():
 
         uploaded_data = upload_stock_data()
         if uploaded_data is not None:
+            st.success("文件上传成功.")
             stock_data['uploaded'] = uploaded_data
             stock_df = 'uploaded'  #  用于标识上传的数据集
         else:

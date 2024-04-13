@@ -115,7 +115,6 @@ def upload_stock_data():
         except Exception as e:
             st.sidebar.error(f"处理文件时发生错误: {e}")
             return None
-
     return None
 
 def main():
@@ -162,7 +161,7 @@ def main():
 
     data_source = selected_stock_df[['Open', 'Close']]
     scatter_chart = {
-        "title": {"text": f"{stock_name}股票：开盘价和收盘价之间的关系"},
+        "title": {"text": f"{stock_name}股票 - 开盘价和收盘价之间的关系"},
         "xAxis": {"type": "value", "name": "开盘价"},
         "yAxis": {"type": "value", "name": "收盘价"},
         "series": [
@@ -197,12 +196,14 @@ def main():
         X_test_pred = selected_stock_model.predict(X_test)
         #  将预测值转换回股价
         X_test_pred_price = scaler.inverse_transform(X_test_pred)
+        rounded_pred_price = [round(num, 3) for num in X_test_pred_price.flatten().tolist()]
+
         #  确保日期列是 datetime 类型
         selected_stock_df['Date'] = pd.to_datetime(selected_stock_df['Date'])
         #  创建ECharts图表
         echarts_config = {
             "animationDuration": 10000,
-            "title": {"text": f"{stock_name}：股价预测"},
+            "title": {"text": f"{stock_name} - 股价预测"},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["实际", "预测"]}, 
             "toolbox": {
@@ -252,7 +253,7 @@ def main():
                 },
                 {
                     "type": "line",
-                    "data": X_test_pred_price.flatten().tolist(),
+                    "data": rounded_pred_price,
                     "name": "预测",
                     "showSymbol": True,
                     "lineStyle": {"type": "dashed"},
@@ -266,9 +267,10 @@ def main():
         last_data_scaled = X_train_set[-look_back:]
         # 获取未来股价预测
         future_dates, future_prices = predict_future_prices(selected_stock_model, last_data_scaled, look_back, scaler, days_to_predict)
+        round_future_prices = [round(num, 3) for num in future_prices]
         # 创建未来股价预测图表配置
         future_echarts_config = {
-            "title": {"text": f"{stock_name}：未来股价预测"},
+            "title": {"text": f"{stock_name} - 未来股价预测"},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["预测"]},
             "xAxis": {
@@ -279,7 +281,7 @@ def main():
             "series": [
                 {
                     "type": "line",
-                    "data": future_prices,
+                    "data": round_future_prices,
                     "name": "预测",
                     "showSymbol": True,
                     "lineStyle": {"type": "dashed"},
@@ -292,21 +294,19 @@ def main():
     else:
         st.sidebar.write('未知模型:', stock_model_n)
 
-    last_day_price = future_prices[-1]  
-    st.sidebar.write(f'未来第 {days_to_predict} 天的股价预测: {last_day_price:.2f}')
+    last_day_price = round_future_prices[-1]  
+    st.sidebar.markdown(f'未来第<font color="red">{days_to_predict}</font>天的股价预测: <font color="red">{last_day_price}</font>', unsafe_allow_html=True)
 
     data_point = st.sidebar.slider('选择数据点', min_value=0, max_value=len(Y_test)-1)
     selected_date = selected_stock_df.iloc[data_point + look_back]["Date"]
     actual_price = selected_stock_df.iloc[data_point + look_back]["Close"]
-    predicted_price = X_test_pred_price[data_point][0]
-    st.sidebar.write(f'日期: {selected_date}')
-    st.sidebar.write(f'实际收盘价: {actual_price}')
-    st.sidebar.write(f'预测收盘价: {predicted_price}')
+    st.sidebar.markdown(f'日期: <font color="red">{selected_date}</font>', unsafe_allow_html=True)
+    st.sidebar.markdown(f'实际收盘价: <font color="red">{actual_price}</font>', unsafe_allow_html=True)
+    st.sidebar.markdown(f'预测收盘价: <font color="red">{rounded_pred_price[0]}</font>', unsafe_allow_html=True)
     
     st.sidebar.info('该项目可以帮助你理解LSTM')
     st.divider()
     st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
-
 
 if __name__ == '__main__':
 

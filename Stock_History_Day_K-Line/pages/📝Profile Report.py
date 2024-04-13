@@ -53,11 +53,14 @@ def add_logo():
 def upload_and_profile_data():
     uploaded_file = st.sidebar.file_uploader("Upload your CSV file", type=["csv"])
     if uploaded_file is not None:
+        file_name = os.path.splitext(uploaded_file.name)[0]
+        st.title(f"{file_name}—自动分析报告")
         # 读取上传的 CSV 文件
         df = pd.read_csv(uploaded_file)
         profile = ProfileReport(df)  # Modified to use ydata_profiling
         # profile = pandas_profiling.ProfileReport(df)
         st_profile_report(profile)
+        st.success("文件上传成功.")
     else:
         st.sidebar.write("上传 CSV 文件以生成配置文件报告.")
 
@@ -84,6 +87,8 @@ def main():
         st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
     else:
         selected_stock_df = stock_data[stock_df]
+        stock_name = selected_stock_df['Stock Name'].iloc[0] 
+        st.title(f"{stock_name}——自动分析报告")
         st.divider()
         st.sidebar.caption('<p style="text-align:center">made with ❤️ by Yuan</p>', unsafe_allow_html=True)
         # stock_data

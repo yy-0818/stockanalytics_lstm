@@ -55,12 +55,11 @@ def upload_and_profile_data():
     if uploaded_file is not None:
         file_name = os.path.splitext(uploaded_file.name)[0]
         st.title(f"{file_name}—自动分析报告")
-        # 读取上传的 CSV 文件
         df = pd.read_csv(uploaded_file)
+        st.sidebar.success("文件上传成功.")
         profile = ProfileReport(df)  # Modified to use ydata_profiling
         # profile = pandas_profiling.ProfileReport(df)
         st_profile_report(profile)
-        st.success("文件上传成功.")
     else:
         st.sidebar.write("上传 CSV 文件以生成配置文件报告.")
 

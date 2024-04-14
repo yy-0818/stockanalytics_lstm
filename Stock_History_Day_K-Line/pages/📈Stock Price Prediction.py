@@ -150,7 +150,7 @@ def main():
     selected_stock_df = stock_data[stock_df]
     selected_stock_model = stock_model[stock_model_n]
     stock_name = selected_stock_df['Stock Name'].iloc[0] 
-    st.title('{}股票数据关联图'.format(stock_name))
+    st.title('{}股票数据预测'.format(stock_name))
     #  stock_data
     if stock_df in stock_data:
         st.title('')
@@ -158,27 +158,6 @@ def main():
         with see_data:
             st.dataframe(data=selected_stock_df.reset_index(drop=True))
 
-
-    data_source = selected_stock_df[['Open', 'Close']]
-    scatter_chart = {
-        "title": {"text": f"{stock_name}股票 - 开盘价和收盘价之间的关系"},
-        "xAxis": {"type": "value", "name": "开盘价"},
-        "yAxis": {"type": "value", "name": "收盘价"},
-        "series": [
-            {
-                "type": "scatter",
-                "data": data_source.values.tolist(),
-                "label": {"show": False},
-            }
-        ],
-        "tooltip": {"trigger": "item", "formatter": "{c}"},
-    }
-    #  在Streamlit中显示ECharts图表
-    st_echarts(
-        options=scatter_chart,
-        height="400px",
-        key="scatter_chart", 
-    )
 
     # stock_model
     if stock_model_n in stock_model:
@@ -203,7 +182,7 @@ def main():
         #  创建ECharts图表
         echarts_config = {
             "animationDuration": 10000,
-            "title": {"text": f"{stock_name} - 股价预测"},
+            "title": {"text": f"{stock_name} - {stock_model_n}股价预测"},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["实际", "预测"]}, 
             "toolbox": {
@@ -263,6 +242,7 @@ def main():
             ],
         }
         st_echarts(echarts_config, height="400px")
+        st.markdown('---')
         # 选择最后look_back天的数据作为预测的输入
         last_data_scaled = X_train_set[-look_back:]
         # 获取未来股价预测
@@ -270,7 +250,7 @@ def main():
         round_future_prices = [round(num, 3) for num in future_prices]
         # 创建未来股价预测图表配置
         future_echarts_config = {
-            "title": {"text": f"{stock_name} - 未来股价预测"},
+            "title": {"text": f"{stock_name} - {stock_model_n}未来股价预测"},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["预测"]},
             "xAxis": {

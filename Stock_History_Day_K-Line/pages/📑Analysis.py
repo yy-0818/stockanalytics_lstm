@@ -1,7 +1,6 @@
 import logging
 import os
 import streamlit as st
-import numpy as np
 import pandas as pd
 from streamlit_echarts import st_echarts
 
@@ -160,6 +159,7 @@ def main():
         }]
     }
     st_echarts(options=options, height="500px")
+    st.markdown('---')
 
     data_source2 = selected_stock_df.reset_index()[['Date', 'Volume']]
     dates = data_source2['Date'].dt.strftime('%Y-%m-%d').tolist()
@@ -206,7 +206,7 @@ def main():
         },
         "yAxis": {
             "type": 'value',
-            "name": 'Volume'
+            "name": '成交量'
         },
         "series": [{
             "data": volumes,
@@ -215,6 +215,24 @@ def main():
         }]
     }
     st_echarts(options=options, height="500px")
+    st.markdown('---')
+
+    data_source = selected_stock_df[['Open', 'Close']]
+    scatter_chart = {
+        "title": {"text": f"{stock_name}股票 - 开盘价和收盘价之间的关系"},
+        "xAxis": {"type": "value", "name": "开盘价"},
+        "yAxis": {"type": "value", "name": "收盘价"},
+        "series": [
+            {
+                "type": "scatter",
+                "data": data_source.values.tolist(),
+                "label": {"show": False},
+            }
+        ],
+        "tooltip": {"trigger": "item", "formatter": "{c}"},
+    }
+    st_echarts(options=scatter_chart,height="500px",key="scatter_chart", )
+    st.markdown('---')
 
     data_source3 = selected_stock_df.reset_index()[['Date', 'Close']]
     dates = data_source3['Date'].dt.strftime('%Y-%m-%d').tolist()
@@ -225,12 +243,13 @@ def main():
     if all(f"MA for {ma} days" in selected_stock_df.columns for ma in ma_day):
         data_source4 = selected_stock_df.reset_index()[['MA for 10 days', 'MA for 20 days','MA for 50 days']]
         close_prices = data_source3['Close'].tolist()
-        ma_10 = data_source4['MA for 10 days'].tolist()
-        ma_20 = data_source4['MA for 20 days'].tolist()
-        ma_50 = data_source4['MA for 50 days'].tolist()
+        ma_10 = [round(x, 3) for x in data_source4['MA for 10 days'].tolist()]
+        ma_20 = [round(x, 3) for x in data_source4['MA for 20 days'].tolist()]
+        ma_50 = [round(x, 3) for x in data_source4['MA for 50 days'].tolist()]
+
         options = {
         "title": {
-            "text": f"{stock_name} - 调整收盘价和移动平均线"
+            "text": f"{stock_name} - 收盘价和移动平均线"
         },
         "toolbox": {
             "feature": {
@@ -274,7 +293,7 @@ def main():
         },
         "yAxis": {
             "type": 'value',
-            "name": 'Price'
+            "name": '股价'
         },
         "series": [
             {

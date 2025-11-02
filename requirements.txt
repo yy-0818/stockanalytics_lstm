@@ -10,12 +10,12 @@ pandas==2.0.3
 numpy==1.24.3
 ydata-profiling==4.6.1
 
-# 机器学习
-tensorflow-cpu==2.12.0
-scikit-learn==1.3.1
+# 机器学习 
+tensorflow-cpu==2.13.0
 
 # 其他功能
 efinance==0.5.0
 openai==1.3.0
 pygwalker==0.3.15
 plotly==5.15.0
+scikit-learn==1.3.1

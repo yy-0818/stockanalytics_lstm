@@ -70,7 +70,7 @@ jupyterlab==4.0.6
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.9
 jupyterlab_server==2.25.0
-keras==2.14.0
+keras==2.13.1
 kiwisolver==1.4.5
 libclang==16.0.6
 Markdown==3.4.4
@@ -191,6 +191,7 @@ wordcloud==1.9.2
 wrapt==1.14.1
 ydata-profiling==4.5.1
 zipp==3.17.0
+
 
 
 

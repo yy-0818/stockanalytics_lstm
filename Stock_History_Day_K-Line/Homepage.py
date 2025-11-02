@@ -80,7 +80,8 @@ def tell_me_more():
       """)
 
     col1, col2,col3 = st.columns(3)
-    col2.image(r'Stock_History_Day_K-Line\images\rnn.png', width=650, caption='循环神经网络结构图')
+    # col2.image(r'Stock_History_Day_K-Line\images\rnn.png', width=650, caption='循环神经网络结构图')
+    col2.image(os.path.join('Stock_History_Day_K-Line', 'images', 'rnn.png'), width=650, caption='循环神经网络结构图')
     st.markdown("""
         &emsp;RNN 模型是 LSTM 模型的底层结构，函数形式为：
     """)
@@ -104,7 +105,8 @@ def tell_me_more():
         &emsp;LSTM 神经网络由相互联系的递归子网络，即记忆模块组成，记忆模块主要包括三个门：遗忘门，输入门，输出门，和一个记忆单元。
     """)
     col14, col5,col6 = st.columns(3)
-    col5.image(r'Stock_History_Day_K-Line\images\lstm.png', width=650, caption='LSTM 神经网络结构图')
+    # col5.image(r'Stock_History_Day_K-Line\images\lstm.png', width=650, caption='LSTM 神经网络结构图')
+    col5.image(os.path.join('Stock_History_Day_K-Line', 'images', 'lstm.png'), width=650, caption='LSTM 神经网络结构图')
     # st.latex(r"""
     # \begin{align*}
     # f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\

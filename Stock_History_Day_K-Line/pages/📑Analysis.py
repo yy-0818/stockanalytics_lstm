@@ -14,10 +14,21 @@ types = ["贵州茅台","苹果","腾讯"]
 label_stock_dict_teams = {"Stock Name","Stock Code","Date","Open","Close","High","Low","Volume","Turnover,Amplitude","Change Percent","Change Amount","Turnover Rate"}
 
 @st.cache_data 
+# def load_data():
+#     data_locs = [os.getcwd() + '\Stock_History_Day_K-Line\Data\stock_{}.csv'.format(n) for n in range(1, 5)]
+#     data = [pd.read_csv(data_loc) for data_loc in data_locs]
+#     return data
 def load_data():
-    data_locs = [os.getcwd() + '\Stock_History_Day_K-Line\Data\stock_{}.csv'.format(n) for n in range(1, 5)]
-    data = [pd.read_csv(data_loc) for data_loc in data_locs]
-    return data
+    try:
+        # 修复路径：使用正斜杠和 os.path.join
+        data_locs = [os.path.join(os.getcwd(), 'Stock_History_Day_K-Line', 'Data', f'stock_{n}.csv') for n in range(1, 5) ]
+        data = [pd.read_csv(data_loc) for data_loc in data_locs]
+        return data
+    except Exception as e:
+        st.error(f"数据加载失败: {e}")
+        # 创建空的DataFrame作为备用
+        empty_df = pd.DataFrame(columns=list(label_stock_dict_teams))
+        return [empty_df] * 4
 
 
 #  加载数据

@@ -1,3 +1,6 @@
+# 固定 rich 版本
+rich==13.7.0
+
 # Streamlit 核心
 streamlit==1.29.0
 
@@ -7,16 +10,15 @@ streamlit-pandas-profiling==0.1.3
 
 # 数据分析
 pandas==2.0.3
-numpy==1.24.3
+numpy==1.23.5
 ydata-profiling==4.6.1
 
-# 机器学习 
-tensorflow-cpu==2.13.0
+# 机器学习
+tensorflow-cpu==2.12.0
+scikit-learn==1.3.1
 
 # 其他功能
 efinance==0.5.0
 openai==1.3.0
 pygwalker==0.3.15
 plotly==5.15.0
-scikit-learn==1.3.1
-

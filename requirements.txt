@@ -1,21 +1,7 @@
-# 首先固定核心包版本
-rich==13.7.0
 streamlit==1.29.0
-
-# Streamlit 组件
-streamlit-echarts==0.4.0
-streamlit-pandas-profiling==0.1.3
-
-# 数据分析 - 使用兼容版本
 pandas==2.0.3
 numpy==1.23.5
-ydata-profiling==4.5.1  # 使用稳定版本，避免 phik 问题
-
-# 机器学习
-tensorflow-cpu==2.12.0
-scikit-learn==1.3.1
-
-# 其他功能
 efinance==0.5.0
 openai==1.3.0
-pygwalker==0.3.14  # 使用稳定版本
+scikit-learn==1.3.1
+streamlit-echarts==0.4.0
